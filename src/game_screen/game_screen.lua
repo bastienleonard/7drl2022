@@ -433,8 +433,6 @@ local function handle_input(self, input)
         action = UnitAction.Move.new(Vec2.RIGHT_AND_UP)
     elseif input == PlayerInput.MOVE_RIGHT_AND_DOWN then
         action = UnitAction.Move.new(Vec2.RIGHT_AND_DOWN)
-    else
-        error(string.format('Unhandled input %s', input))
     end
 
     if action then
@@ -475,35 +473,7 @@ function class:draw()
 end
 
 function class:on_key_pressed(key, scancode, is_repeat)
-    local input = nil
-
-    if scancode == '.' then
-        input = PlayerInput.REST
-    elseif scancode == 'h' then
-        input = PlayerInput.MOVE_LEFT
-    elseif scancode == 'l' then
-        input = PlayerInput.MOVE_RIGHT
-    elseif scancode == 'k' then
-        input = PlayerInput.MOVE_UP
-    elseif scancode == 'j' then
-        input = PlayerInput.MOVE_DOWN
-    elseif scancode == 'y' then
-        input = PlayerInput.MOVE_LEFT_AND_UP
-    elseif scancode == 'b' then
-        input = PlayerInput.MOVE_LEFT_AND_DOWN
-    elseif scancode == 'u' then
-        input = PlayerInput.MOVE_RIGHT_AND_UP
-    elseif scancode == 'n' then
-        input = PlayerInput.MOVE_RIGHT_AND_DOWN
-    elseif scancode == 'left' then
-        input = PlayerInput.MOVE_LEFT
-    elseif scancode == 'right' then
-        input = PlayerInput.MOVE_RIGHT
-    elseif scancode == 'up' then
-        input = PlayerInput.MOVE_UP
-    elseif scancode == 'down' then
-        input = PlayerInput.MOVE_DOWN
-    end
+    local input = PlayerInput.from_scancode(scancode)
 
     if input then
         handle_input(self, input)

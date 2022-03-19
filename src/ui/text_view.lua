@@ -9,6 +9,7 @@ class.__index = class
 
 local function init(self, options)
     self.text = utils.require_key(options, 'text')
+    self.text_color = options.text_color
 end
 
 function class.draw_text(text, x, y, options)
@@ -26,7 +27,7 @@ function class.draw_text(text, x, y, options)
             char_start_offset,
             next_char_start_offset - 1
         )
-        globals.terminal:draw_cell(char, x, y)
+        globals.terminal:draw_cell(char, x, y, { color = options.text_color })
         x = x + 1
     end
 end
@@ -58,7 +59,15 @@ function class:draw(x, y)
     parent.draw(self, x, y)
 
     if self.measured_height >= 1 then
-        class.draw_text(self.text, x, y, { max_width = self.measured_width })
+        class.draw_text(
+            self.text,
+            x,
+            y,
+            {
+                max_width = self.measured_width,
+                text_color = self.text_color
+            }
+        )
     end
 end
 
