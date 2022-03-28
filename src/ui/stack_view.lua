@@ -24,8 +24,10 @@ function class:__tostring()
 end
 
 function class:measure(options)
-    local available_width = options.width
-    local available_height = options.height
+    local available_width = options.width or options.max_width
+    local available_height = options.height or options.max_height
+    local original_available_width = available_width
+    local original_available_height = available_height
     local width = 0
     local height = 0
 
@@ -48,24 +50,35 @@ function class:measure(options)
             if child.measured_height > height then
                 height = child.measured_height
             end
+
+            available_width = available_width - child.measured_width
+            assert(available_width >= 0)
         elseif self.orientation == class.Orientation.VERTICAL then
             if child.measured_width > width then
                 width = child.measured_width
             end
 
             height = height + child.measured_height
+            available_height = available_height - child.measured_height
+            assert(available_height >= 0)
         else
             error('Unreachable')
         end
     end
 
+    if original_available_width then
+        assert(width <= original_available_width)
+    end
+
+    if original_available_height then
+        assert(height <= original_available_height)
+    end
+
     if options.width then
-        assert(width <= options.width)
         width = options.width
     end
 
     if options.height then
-        assert(height <= options.height)
         height = options.height
     end
 
