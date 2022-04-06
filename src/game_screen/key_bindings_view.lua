@@ -45,4 +45,8 @@ function class.new(options)
     return self
 end
 
+function class:__tostring()
+    return 'KeyBindingsView'
+end
+
 return class

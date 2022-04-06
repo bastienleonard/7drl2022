@@ -1,5 +1,4 @@
 local BaseView = require('ui.base_view')
-local TextView = require('ui.text_view')
 local utils = require('utils')
 
 local parent = BaseView
@@ -27,6 +26,11 @@ end
 
 function class:draw(x, y)
     parent.draw(self, x, y)
+
+    if self.measured_width == 0 or self.measured_height == 0 then
+        return
+    end
+
     local messages = globals.screens:current().messages
 
     for i = 1, self.measured_height do
@@ -42,7 +46,12 @@ function class:draw(x, y)
             break
         end
 
-        TextView.draw_text(message, x, y + i - 1)
+        self:draw_text(
+            message,
+            x,
+            y + i - 1,
+            { max_width = self.measured_width }
+        )
     end
 end
 

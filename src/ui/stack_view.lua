@@ -26,6 +26,15 @@ end
 function class:measure(options)
     local available_width = options.width or options.max_width
     local available_height = options.height or options.max_height
+
+    if available_width then
+        assert(available_width >= 0)
+    end
+
+    if available_height then
+        assert(available_height >= 0)
+    end
+
     local original_available_width = available_width
     local original_available_height = available_height
     local width = 0
@@ -51,16 +60,21 @@ function class:measure(options)
                 height = child.measured_height
             end
 
-            available_width = available_width - child.measured_width
-            assert(available_width >= 0)
+            if available_width then
+                available_width = available_width - child.measured_width
+                assert(available_width >= 0)
+            end
         elseif self.orientation == class.Orientation.VERTICAL then
             if child.measured_width > width then
                 width = child.measured_width
             end
 
             height = height + child.measured_height
-            available_height = available_height - child.measured_height
-            assert(available_height >= 0)
+
+            if available_height then
+                available_height = available_height - child.measured_height
+                assert(available_height >= 0)
+            end
         else
             error('Unreachable')
         end

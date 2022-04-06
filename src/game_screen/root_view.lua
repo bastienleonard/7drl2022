@@ -5,12 +5,15 @@ local KeyBindingsView = require('game_screen.key_bindings_view')
 local MapView = require('game_screen.map_view')
 local MessageLogView = require('game_screen.message_log_view')
 local RowView = require('ui.row_view')
+local utils = require('utils')
 
 local parent = BaseView
 local class = setmetatable({}, { __index = parent })
 class.__index = class
 
 local function add_child(self, child, x, y)
+    assert(x >= 0)
+    assert(y >= 0)
     table.insert(
         self.children,
         {
@@ -19,6 +22,46 @@ local function add_child(self, child, x, y)
             y = y
         }
     )
+end
+
+local function make_child_sizes(width, height)
+    local function size(width, height)
+        return {
+            width = width or -1,
+            height = height or -1
+        }
+    end
+
+    local result = {}
+    result.hero_stats = size()
+    result.map = size()
+    result.key_bindings = size()
+    result.messages = size()
+
+    if width >= 17 * 2 + 40 then
+        result.hero_stats.width = utils.clamp(math.floor(width / 5), 17, 30)
+        result.key_bindings.width = utils.clamp(math.floor(width / 5), 17, 30)
+    else
+        result.hero_stats.width = 0
+        result.key_bindings.width = 0
+    end
+
+    result.map.width = width
+        - result.hero_stats.width
+        - result.key_bindings.width
+    result.messages.width = width
+
+    if height >= 20 then
+        result.messages.height = utils.clamp(math.floor(height / 3), 3, 20)
+    else
+        result.messages.height = 0
+    end
+
+    result.hero_stats.height = height - result.messages.height
+    result.map.height = height - result.messages.height
+    result.key_bindings.height = height - result.messages.height
+
+    return result
 end
 
 function class.new(options)
@@ -30,16 +73,23 @@ function class.new(options)
     return self
 end
 
+function class:__tostring()
+    return 'game_screen.RootView'
+end
+
 function class:measure(options)
     self:set_measured(options.width, options.height)
-
+    local child_sizes = make_child_sizes(
+        self.measured_width,
+        self.measured_height
+    )
     local message_log_view = BorderView.new({
             title = 'Log',
             children = { MessageLogView.new({}) }
     })
     message_log_view:measure({
-            width = self.measured_width,
-            height = 20
+            width = child_sizes.messages.width,
+            height = child_sizes.messages.height
     })
     add_child(
         self,
@@ -53,8 +103,8 @@ function class:measure(options)
             children = { HeroStatsView.new({}) }
     })
     hero_stats_view:measure({
-            width = 30,
-            height = self.measured_height - message_log_view.measured_height
+            width = child_sizes.hero_stats.width,
+            height = child_sizes.hero_stats.height
     })
     add_child(self, hero_stats_view, 0, 0)
 
@@ -63,8 +113,8 @@ function class:measure(options)
             children = { KeyBindingsView.new({}) }
     })
     key_bindings_view:measure({
-            width = 30,
-            height = self.measured_height - message_log_view.measured_height
+            width = child_sizes.key_bindings.width,
+            height = child_sizes.key_bindings.height
     })
     add_child(
         self,
@@ -81,11 +131,8 @@ function class:measure(options)
             children = { MapView.new({}) }
     })
     map_view:measure({
-            width = self.measured_width
-                - hero_stats_view.measured_width
-                - key_bindings_view.measured_width,
-            height = self.measured_height
-                - message_log_view.measured_height
+            width = child_sizes.map.width,
+            height = child_sizes.map.height
     })
     add_child(
         self,

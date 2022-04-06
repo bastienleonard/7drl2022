@@ -2,6 +2,8 @@
 
 * Fix UI elements expanding beyond their boundaries. This was only visible when
   resizing the window (with Alt + Enter).
+* Make the UI more resilient and more reactive to window size changes. This was
+  only visible when resizing the window (with Alt + Enter).
 
 ## 0.2 — 20 March 2022
 

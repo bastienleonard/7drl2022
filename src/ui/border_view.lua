@@ -24,32 +24,45 @@ function class:__tostring()
 end
 
 function class:measure(options)
-    local child = self.children[1]
-    child:measure({
-            max_width = options.width - 4,
-            max_height = options.height - 2
-    })
-    self:set_measured(options.width, options.height)
+    local width = options.width
+    local height = options.height
+
+    if width > 4 and height > 2 then
+        local child = self.children[1]
+        child:measure({
+                max_width = width - 4,
+                max_height = height - 2
+        })
+    else
+        self.children = {}
+    end
+
+    self:set_measured(width, height)
 end
 
 function class:draw(x, y)
     parent.draw(self, x, y)
+
+    if self.measured_width < 3 or self.measured_height < 3 then
+        return
+    end
+
     local terminal = globals.terminal
-    terminal:draw_cell('╭', x, y)
-    terminal:draw_cell('╮', x + self.measured_width - 1, y)
-    terminal:draw_cell('╰', x, y + self.measured_height - 1)
-    terminal:draw_cell(
+    self:draw_text('╭', x, y)
+    self:draw_text('╮', x + self.measured_width - 1, y)
+    self:draw_text('╰', x, y + self.measured_height - 1)
+    self:draw_text(
         '╯',
         x + self.measured_width - 1,
         y + self.measured_height - 1
     )
 
     for x = x + 1, x + self.measured_width - 2 do
-        terminal:draw_cell('─', x, y)
+        self:draw_text('─', x, y)
     end
 
     self.title = '╴' .. self.title .. '╶'
-    TextView.draw_text(
+    self:draw_text(
         self.title,
         x + 1,
         y,
@@ -57,18 +70,22 @@ function class:draw(x, y)
     )
 
     for x = x + 1, x + self.measured_width - 2 do
-        terminal:draw_cell('─', x, y + self.measured_height - 1)
+        self:draw_text('─', x, y + self.measured_height - 1)
     end
 
     for y = y + 1, y + self.measured_height - 2 do
-        terminal:draw_cell('│', x, y)
+        self:draw_text('│', x, y)
     end
 
     for y = y + 1, y + self.measured_height - 2 do
-        terminal:draw_cell('│', x + self.measured_width - 1, y)
+        self:draw_text('│', x + self.measured_width - 1, y)
     end
 
-    self.children[1]:draw(x + 2, y + 1)
+    local child = self.children[1]
+
+    if child then
+        self.children[1]:draw(x + 2, y + 1)
+    end
 end
 
 return class
