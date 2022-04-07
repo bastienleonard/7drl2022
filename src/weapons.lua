@@ -34,7 +34,7 @@ local AXE = {
     damage_type = DamageType.CUTTING
 }
 local POLEARM = {
-    name = 'Polearm',
+    name = 'polearm',
     melee_damage_type = MeleeDamageType.SWINGING,
     modifier = 4,
     damage_type = DamageType.CUTTING

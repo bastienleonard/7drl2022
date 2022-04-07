@@ -1,5 +1,6 @@
 ## Upcoming
 
+* Fix polearm's name starting with a capital letter.
 * Fix UI elements expanding beyond their boundaries. This was only visible when
   resizing the window (with Alt + Enter).
 * Make the UI more resilient and more reactive to window size changes. This was
