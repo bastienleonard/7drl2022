@@ -1,5 +1,6 @@
 ## Upcoming
 
+* Make the death menu items clickable.
 * Fix polearm's name starting with a capital letter.
 * Fix UI elements expanding beyond their boundaries. This was only visible when
   resizing the window (with Alt + Enter).

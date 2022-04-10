@@ -8,8 +8,8 @@ local class = {}
 
 local function rect(self)
     return Rect.new(
-        self._bound_check_x,
-        self._bound_check_y,
+        self.x,
+        self.y,
         self.measured_width,
         self.measured_height
     )
@@ -47,8 +47,8 @@ function class:draw(x, y)
     assert(x >= 0)
     assert(y >= 0)
     assert(self:is_measured())
-    self._bound_check_x = x
-    self._bound_check_y = y
+    self.x = x
+    self.y = y
 
     if DRAW_BOUNDS then
         local terminal = globals.terminal
@@ -112,6 +112,17 @@ function class:draw_text(text, x, y, options)
     end
 
     draw_text(text, x, y, options)
+end
+
+function class:on_click(x, y)
+    if self.children then
+        for _, child in ipairs(self.children) do
+            if child.x and child.y and rect(child):contains(x, y) then
+                child:on_click(x, y)
+                break
+            end
+        end
+    end
 end
 
 return class

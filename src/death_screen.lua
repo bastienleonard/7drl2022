@@ -1,4 +1,5 @@
 local BaseScreen = require('base_screen')
+local ButtonView = require('ui.button_view')
 local colors = require('colors')
 local ColumnView = require('ui.column_view')
 local PlayerInput = require('player_input')
@@ -36,6 +37,28 @@ local function activate_current_item(self)
     self.items[self.current_item].activate()
 end
 
+local function screen_coords_to_cells(x, y)
+    local terminal = globals.terminal
+
+    if x < terminal.x_offset then
+        x = 0
+    elseif x > love.graphics.getWidth() - terminal.x_offset then
+        x = terminal.width - 1
+    else
+        x = math.floor((x - terminal.x_offset) / terminal.cell_width)
+    end
+
+    if y < terminal.y_offset then
+        y = 0
+    elseif y > love.graphics.getHeight() - terminal.y_offset then
+        y = terminal.height - 1
+    else
+        y = math.floor((y - terminal.y_offset) / terminal.cell_height)
+    end
+
+    return x, y
+end
+
 function class.new()
     local self = {}
     parent._init(self, options)
@@ -57,20 +80,27 @@ function class:draw()
             text_color = colors.BLUE
         end
 
-        local text_view = TextView.new({
+        local button = ButtonView.new({
                 text = item.text,
-                text_color = text_color
+                text_color = text_color,
+                on_click = self.items[i].activate
         })
-        table.insert(children, text_view)
+        table.insert(children, button)
     end
 
-    local root = ColumnView.new({
+    self.root_view = ColumnView.new({
             children = children
     })
-    root:measure({})
-    root:draw(
-        math.max(0, utils.round((terminal.width - root.measured_width) / 2)),
-        math.max(0, utils.round((terminal.height - root.measured_height) / 2))
+    self.root_view:measure({})
+    self.root_view:draw(
+        math.max(
+            0,
+            utils.round((terminal.width - self.root_view.measured_width) / 2)
+        ),
+        math.max(
+            0,
+            utils.round((terminal.height - self.root_view.measured_height) / 2)
+        )
     )
 end
 
@@ -83,6 +113,13 @@ function class:on_key_pressed(key, scancode, is_repeat)
         move_current_item_by(self, 1)
     elseif input == PlayerInput.ACTIVATE then
         activate_current_item(self)
+    end
+end
+
+function class:on_mouse_pressed(x, y, button, is_touch, presses)
+    if self.root_view then
+        local cell_x, cell_y = screen_coords_to_cells(x, y)
+        self.root_view:on_click(cell_x, cell_y)
     end
 end
 

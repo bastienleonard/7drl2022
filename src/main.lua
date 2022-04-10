@@ -24,6 +24,10 @@ function love.keypressed(key, scancode, is_repeat)
     end
 end
 
+function love.mousepressed(x, y, button, is_touch, presses)
+    globals.screens:current():on_mouse_pressed(x, y, button, is_touch, presses)
+end
+
 function love.resize(width, height)
     globals.terminal = Terminal.new()
 end
