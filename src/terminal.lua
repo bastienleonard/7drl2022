@@ -16,7 +16,7 @@ local FONTS = {
 local function init(self, font_size)
     self.font_size = font_size
     self.background_color = colors.BLACK
-    self.foreground_color = colors.WHITE
+    self.text_color = colors.WHITE
     self.font = love.graphics.newFont(
         FONT_SOURCE_CODE_PRO,
         self.font_size
@@ -74,13 +74,13 @@ end
 
 function class:draw_cell(char, x, y, options)
     options = options or {}
-    color = options.color or colors.WHITE
-    alpha = options.alpha or 1
+    local text_color = options.text_color or self.text_color
+    local alpha = options.alpha or 1
 
-    if #color == 3 then
-        table.insert(color, alpha)
-    elseif #color == 4 then
-        color[4] = alpha
+    if #text_color == 3 then
+        table.insert(text_color, alpha)
+    elseif #text_color == 4 then
+        text_color[4] = alpha
     else
         error('Unreachable')
     end
@@ -101,7 +101,7 @@ function class:draw_cell(char, x, y, options)
         self.cell_width,
         self.cell_height
     )
-    love.graphics.setColor(unpack(color))
+    love.graphics.setColor(unpack(text_color))
     love.graphics.print(
         char,
         self.font,

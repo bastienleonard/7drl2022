@@ -6,15 +6,6 @@ local DRAW_BOUNDS = false
 
 local class = {}
 
-local function rect(self)
-    return Rect.new(
-        self.x,
-        self.y,
-        self.measured_width,
-        self.measured_height
-    )
-end
-
 local function draw_text(text, x, y, options)
     options = options or {}
     local max_width = options.max_width or globals.terminal.width - x
@@ -30,7 +21,7 @@ local function draw_text(text, x, y, options)
             char_start_offset,
             next_char_start_offset - 1
         )
-        globals.terminal:draw_cell(char, x, y, { color = options.text_color })
+        globals.terminal:draw_cell(char, x, y, options)
         x = x + 1
     end
 end
@@ -80,6 +71,15 @@ function class:set_measured(width, height)
     self.measured_height = height
 end
 
+function class:rect()
+    return Rect.new(
+        self.x,
+        self.y,
+        self.measured_width,
+        self.measured_height
+    )
+end
+
 function class:draw_text(text, x, y, options)
     options = options or {}
     assert(x >= 0)
@@ -97,7 +97,7 @@ function class:draw_text(text, x, y, options)
         local x = coords[1]
         local y = coords[2]
 
-        if not rect(self):contains(x, y) then
+        if not self:rect():contains(x, y) then
             error(
                 string.format(
                     '%s: attempted to draw at (%s,%s)'
@@ -105,7 +105,7 @@ function class:draw_text(text, x, y, options)
                     self,
                     x,
                     y,
-                    rect(self)
+                    self:rect()
                 )
             )
         end
@@ -117,7 +117,7 @@ end
 function class:on_click(x, y)
     if self.children then
         for _, child in ipairs(self.children) do
-            if child.x and child.y and rect(child):contains(x, y) then
+            if child.x and child.y and child:rect():contains(x, y) then
                 child:on_click(x, y)
                 break
             end

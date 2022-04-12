@@ -76,34 +76,49 @@ function class:draw(x, y)
     parent.draw(self, x, y)
     local map = globals.screens:current().map
     local terminal = globals.terminal
+    local hero = globals.screens:current().hero
+    local k = math.floor(self.measured_width / 2)
+    local map_x_start = math.max(
+        0,
+        hero.position.x - k
+    )
+    local map_x_end = math.min(
+        map.width - 1,
+        hero.position.x + k
+    )
+    local map_y_start = math.max(
+        0,
+        hero.position.y - k
+    )
+    local map_y_end = math.min(
+        map.height - 1,
+        hero.position.y + k
+    )
 
-    for map_x = 0, math.min(map.width - 1, x + self.measured_width - 1) do
-        for map_y = 0, math.min(map.height - 1, x + self.measured_height - 1) do
+    for map_x = map_x_start, map_x_end do
+        for map_y = map_y_start, map_y_end do
+            local terminal_x = x
+                + map_x
+                - hero.position.x
+                + math.floor(self.measured_width / 2)
+            local terminal_y = y
+                + map_y
+                - hero.position.y
+               + math.floor(self.measured_height / 2)
+
             local tile = map:get(map_x, map_y)
 
             if tile.fov_status ~= tile.FovStatus.UNEXPLORED then
                 local unit = globals.screens:current():unit_at(map_x, map_y)
                 local char, color, alpha = tile_rendering_info(tile, unit)
-                local hero = globals.screens:current().hero
-                local transformed_x = x
-                    + map_x
-                    - hero.position.x
-                    + utils.round(self.measured_width / 2)
-                local transformed_y = y
-                    + map_y
-                    - hero.position.y
-                    + utils.round(self.measured_height / 2)
 
-                if transformed_x >= x
-                    and transformed_x < x + self.measured_width
-                    and transformed_y >= y
-                    and transformed_y < y + self.measured_height then
-                    terminal:draw_cell(
+                if self:rect():contains(terminal_x, terminal_y) then
+                    self:draw_text(
                         char,
-                        transformed_x,
-                        transformed_y,
+                        terminal_x,
+                        terminal_y,
                         {
-                            color = color,
+                            text_color = color,
                             alpha = alpha
                         }
                     )

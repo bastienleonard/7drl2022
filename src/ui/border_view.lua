@@ -8,6 +8,12 @@ class.__index = class
 
 local function init(self, options)
     self.title = utils.require_key(options, 'title')
+
+    if options.add_child_padding == nil then
+        options.add_child_padding = true
+    end
+
+    self.add_child_padding = options.add_child_padding
     self.children = utils.require_key(options, 'children')
     assert(#self.children == 1)
 end
@@ -29,8 +35,16 @@ function class:measure(options)
 
     if width > 4 and height > 2 then
         local child = self.children[1]
+        local x_offset
+
+        if self.add_child_padding then
+            x_offset = 4
+        else
+            x_offset = 2
+        end
+
         child:measure({
-                max_width = width - 4,
+                max_width = width - x_offset,
                 max_height = height - 2
         })
     else
@@ -84,7 +98,15 @@ function class:draw(x, y)
     local child = self.children[1]
 
     if child then
-        self.children[1]:draw(x + 2, y + 1)
+        local x_offset
+
+        if self.add_child_padding then
+            x_offset = 2
+        else
+            x_offset = 1
+        end
+
+        self.children[1]:draw(x + x_offset, y + 1)
     end
 end
 

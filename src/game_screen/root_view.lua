@@ -128,6 +128,7 @@ function class:measure(options)
                             'Dungeon level %s',
                             globals.screens:current().level_count
             ),
+            add_child_padding = false,
             children = { MapView.new({}) }
     })
     map_view:measure({
