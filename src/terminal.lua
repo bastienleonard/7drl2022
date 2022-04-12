@@ -111,7 +111,7 @@ function class:draw_cell(char, x, y, options)
 end
 
 function class:draw_grid()
-    love.graphics.setColor(unpack(colors.ORANGE))
+    love.graphics.setColor(unpack(colors.DARK_GRAY))
 
     -- Vertical lines
     for x = 0, self.width do
