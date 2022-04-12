@@ -1,17 +1,13 @@
 local utf8 = require('utf8')
 
 local colors = require('colors')
+local table_utils = require('table_utils')
 local ui_scaled = require('ui_scaled')
 
 local class = {}
 class.__index = class
 
 local FONT_SOURCE_CODE_PRO = 'assets/fonts/source_code_pro/static/SourceCodePro-Regular.ttf'
-local FONTS = {
-    FONT_INCONSOLATA,
-    FONT_SOURCE_CODE_PRO,
-    FONT_NOTO_SANS_MONO
-}
 
 local function init(self, font_size)
     self.font_size = font_size
@@ -90,8 +86,7 @@ function class:draw_cell(char, x, y, options)
     assert(x < self.width)
     assert(y >= 0)
     assert(y < self.height)
-    local table_utils = require('table_utils')
-    local background_color = table_utils.dup(colors.BLACK)
+    local background_color = table_utils.dup(self.background_color)
     table.insert(background_color, alpha)
     love.graphics.setColor(unpack(background_color))
     love.graphics.rectangle(
