@@ -413,7 +413,7 @@ function locals.play_enemy_turns(self)
 end
 
 local function handle_input(self, input)
-    local actions = nil
+    local action = nil
 
     if input == PlayerInput.REST then
         action = UnitAction.Rest.new()
