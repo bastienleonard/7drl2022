@@ -18,7 +18,9 @@ local function make_ui()
         { 'n', 'Move ↘' },
         { '.', 'Skip turn' },
         { 'pagedown', 'Scroll messages down' },
-        { 'pageup', 'Scroll messages up' }
+        { 'pageup', 'Scroll messages up' },
+        { '-', 'Decrease font size' },
+        { '=', 'Increase font size' }
     }
     return array_utils.map(
         x,

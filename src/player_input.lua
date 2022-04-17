@@ -12,7 +12,9 @@ local PlayerInput = enum(
     'MOVE_RIGHT_AND_DOWN',
     'ACTIVATE',
     'SCROLL_DOWN',
-    'SCROLL_UP'
+    'SCROLL_UP',
+    'INCREASE_FONT_SIZE',
+    'DECREASE_FONT_SIZE'
 )
 
 PlayerInput.from_scancode = function(scancode)
@@ -51,6 +53,10 @@ PlayerInput.from_scancode = function(scancode)
         input = PlayerInput.SCROLL_DOWN
     elseif scancode == 'pageup' then
         input = PlayerInput.SCROLL_UP
+    elseif scancode == '=' then
+        input = PlayerInput.INCREASE_FONT_SIZE
+    elseif scancode == '-' then
+        input = PlayerInput.DECREASE_FONT_SIZE
     end
 
     return input

@@ -1,5 +1,6 @@
 ## Upcoming
 
+* Add key bindings for changing the font size.
 * Support scrolling in the messages log.
 * Make the death menu items clickable.
 * Fix polearm's name starting with a capital letter.
