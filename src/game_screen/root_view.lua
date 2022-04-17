@@ -5,11 +5,14 @@ local KeyBindingsView = require('game_screen.key_bindings_view')
 local MapView = require('game_screen.map_view')
 local MessageLogView = require('game_screen.message_log_view')
 local RowView = require('ui.row_view')
+local ScrollView = require('ui.scroll_view')
 local utils = require('utils')
 
 local parent = BaseView
 local class = setmetatable({}, { __index = parent })
 class.__index = class
+
+class.ID_MESSAGES_SCROLL_VIEW = 'messages_scroll_view'
 
 local function add_child(self, child, x, y)
     assert(x >= 0)
@@ -38,9 +41,9 @@ local function make_child_sizes(width, height)
     result.key_bindings = size()
     result.messages = size()
 
-    if width >= 17 * 2 + 40 then
-        result.hero_stats.width = utils.clamp(math.floor(width / 5), 17, 30)
-        result.key_bindings.width = utils.clamp(math.floor(width / 5), 17, 30)
+    if width >= 35 * 2 + 40 then
+        result.hero_stats.width = 35
+        result.key_bindings.width = 35
     else
         result.hero_stats.width = 0
         result.key_bindings.width = 0
@@ -85,7 +88,12 @@ function class:measure(options)
     )
     local message_log_view = BorderView.new({
             title = 'Log',
-            children = { MessageLogView.new({}) }
+            children = {
+                ScrollView.new({
+                        id = class.ID_MESSAGES_SCROLL_VIEW,
+                        children = { MessageLogView.new({}) }
+                })
+            }
     })
     message_log_view:measure({
             width = child_sizes.messages.width,

@@ -1,5 +1,6 @@
 ## Upcoming
 
+* Support scrolling in the messages log.
 * Make the death menu items clickable.
 * Fix polearm's name starting with a capital letter.
 * Fix dungeon content sometimes not displaying correctly when the map was

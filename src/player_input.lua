@@ -10,7 +10,9 @@ local PlayerInput = enum(
     'MOVE_LEFT_AND_DOWN',
     'MOVE_RIGHT_AND_UP',
     'MOVE_RIGHT_AND_DOWN',
-    'ACTIVATE'
+    'ACTIVATE',
+    'SCROLL_DOWN',
+    'SCROLL_UP'
 )
 
 PlayerInput.from_scancode = function(scancode)
@@ -45,6 +47,10 @@ PlayerInput.from_scancode = function(scancode)
         input = PlayerInput.MOVE_DOWN
     elseif scancode == 'return' or scancode == 'space' then
         input = PlayerInput.ACTIVATE
+    elseif scancode == 'pagedown' then
+        input = PlayerInput.SCROLL_DOWN
+    elseif scancode == 'pageup' then
+        input = PlayerInput.SCROLL_UP
     end
 
     return input

@@ -11,6 +11,7 @@ local random = require('random')
 local PlayerInput = require('player_input')
 local RootView = require('game_screen.root_view')
 local RowView = require('ui.row_view')
+local ScrollView = require('ui.scroll_view')
 local tagged_union = require('tagged_union')
 local UnitKind = require('game_screen.units.unit_kind')
 local utils = require('utils')
@@ -31,6 +32,7 @@ local UnitAction = tagged_union({
 
 local function add_message(self, message)
     table.insert(self.messages, message)
+    ScrollView.scroll_to_bottom(RootView.ID_MESSAGES_SCROLL_VIEW)
 end
 
 local function is_walkable(self, position)
@@ -433,6 +435,10 @@ local function handle_input(self, input)
         action = UnitAction.Move.new(Vec2.RIGHT_AND_UP)
     elseif input == PlayerInput.MOVE_RIGHT_AND_DOWN then
         action = UnitAction.Move.new(Vec2.RIGHT_AND_DOWN)
+    elseif input == PlayerInput.SCROLL_DOWN then
+        ScrollView.scroll_down(RootView.ID_MESSAGES_SCROLL_VIEW)
+    elseif input == PlayerInput.SCROLL_UP then
+        ScrollView.scroll_up(RootView.ID_MESSAGES_SCROLL_VIEW)
     end
 
     if action then

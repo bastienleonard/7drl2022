@@ -5,6 +5,7 @@ local Rect = require('rect')
 local DRAW_BOUNDS = false
 
 local class = {}
+local view_states = {}
 
 local function draw_text(text, x, y, options)
     options = options or {}
@@ -26,8 +27,19 @@ local function draw_text(text, x, y, options)
     end
 end
 
+function class.state_from_id(id)
+    assert(id)
+
+    if view_states[id] == nil then
+        view_states[id] = {}
+    end
+
+    return view_states[id]
+end
+
 function class._init(self, options)
     assert(options)
+    self.id = options.id
 end
 
 function class:measure(options)
@@ -112,6 +124,11 @@ function class:draw_text(text, x, y, options)
     end
 
     draw_text(text, x, y, options)
+end
+
+function class:get_state()
+    assert(self.id)
+    return class.state_from_id(self.id)
 end
 
 function class:on_click(x, y)
