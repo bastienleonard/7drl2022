@@ -37,28 +37,6 @@ local function activate_current_item(self)
     self.items[self.current_item].activate()
 end
 
-local function screen_coords_to_cells(x, y)
-    local terminal = globals.terminal
-
-    if x < terminal.x_offset then
-        x = 0
-    elseif x > love.graphics.getWidth() - terminal.x_offset then
-        x = terminal.width - 1
-    else
-        x = math.floor((x - terminal.x_offset) / terminal.cell_width)
-    end
-
-    if y < terminal.y_offset then
-        y = 0
-    elseif y > love.graphics.getHeight() - terminal.y_offset then
-        y = terminal.height - 1
-    else
-        y = math.floor((y - terminal.y_offset) / terminal.cell_height)
-    end
-
-    return x, y
-end
-
 function class.new()
     local self = {}
     parent._init(self, options)
@@ -113,13 +91,6 @@ function class:on_key_pressed(key, scancode, is_repeat)
         move_current_item_by(self, 1)
     elseif input == PlayerInput.ACTIVATE then
         activate_current_item(self)
-    end
-end
-
-function class:on_mouse_pressed(x, y, button, is_touch, presses)
-    if self.root_view then
-        local cell_x, cell_y = screen_coords_to_cells(x, y)
-        self.root_view:on_click(cell_x, cell_y)
     end
 end
 

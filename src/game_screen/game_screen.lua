@@ -470,12 +470,12 @@ function class:__tostring()
 end
 
 function class:draw()
-    local root_view = RootView.new({})
-    root_view:measure({
+    self.root_view = RootView.new({})
+    self.root_view:measure({
             width = globals.terminal.width,
             height = globals.terminal.height
     })
-    root_view:draw(0, 0)
+    self.root_view:draw(0, 0)
 end
 
 function class:on_key_pressed(key, scancode, is_repeat)

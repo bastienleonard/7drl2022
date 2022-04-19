@@ -14,17 +14,12 @@ class.__index = class
 
 class.ID_MESSAGES_SCROLL_VIEW = 'messages_scroll_view'
 
-local function add_child(self, child, x, y)
-    assert(x >= 0)
-    assert(y >= 0)
-    table.insert(
-        self.children,
-        {
-            view = child,
-            x = x,
-            y = y
-        }
-    )
+local function add_child(self, child, dx, dy)
+    assert(dx >= 0)
+    assert(dy >= 0)
+    child.dx = dx
+    child.dy = dy
+    table.insert(self.children, child)
 end
 
 local function make_child_sizes(width, height)
@@ -155,7 +150,7 @@ function class:draw(x, y)
     parent.draw(self, x, y)
 
     for _, child in ipairs(self.children) do
-        child.view:draw(x + child.x, y + child.y)
+        child:draw(x + child.dx, y + child.dy)
     end
 end
 

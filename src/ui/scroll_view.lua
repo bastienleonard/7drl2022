@@ -1,4 +1,5 @@
 local BaseView = require('ui.base_view')
+local ButtonView = require('ui.button_view')
 local utils = require('utils')
 
 local parent = BaseView
@@ -10,6 +11,24 @@ local SCROLL_STEP = 5
 local function init(self, options)
     self.children = utils.require_key(options, 'children')
     assert(#self.children == 1)
+    table.insert(
+        self.children,
+        ButtonView.new({
+                text = '▲',
+                on_click = function()
+                    self.scroll_up(self.id)
+                end
+        })
+    )
+    table.insert(
+        self.children,
+        ButtonView.new({
+                text = '▼',
+                on_click = function()
+                    self.scroll_down(self.id)
+                end
+        })
+    )
     local state = self:get_state()
 
     if state.scroll_to_last == nil then
@@ -60,8 +79,24 @@ end
 
 function class:measure(options)
     self:set_measured(options.max_width, options.max_height)
+    local scroll_up = self.children[2]
+    scroll_up:measure({
+            max_width = options.max_width,
+            max_height = options.max_height
+    })
+    local scroll_down = self.children[3]
+    scroll_down:measure({
+            max_width = options.max_width,
+            max_height = options.max_height - scroll_up.measured_height
+    })
     local child = self.children[1]
-    child:measure({ max_width = options.max_width })
+    child:measure({
+            max_width = math.max(
+                0,
+                options.max_width
+                - math.max(scroll_up.measured_width, scroll_down.measured_width)
+            )
+    })
     local state = self:get_state()
 
     if state.scroll_to_last then
@@ -78,6 +113,18 @@ end
 
 function class:draw(x, y)
     parent.draw(self, x, y)
+
+    if self.measured_width < 2 or self.measured_height < 2 then
+        return
+    end
+
+    local scroll_up = self.children[2]
+    scroll_up:draw(x + self.measured_width - scroll_up.measured_width, y)
+    local scroll_down = self.children[3]
+    scroll_down:draw(
+        x + self.measured_width - scroll_down.measured_width,
+        y + 1
+    )
     local child = self.children[1]
     assert(child.children)
     local current_offset = 0
