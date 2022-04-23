@@ -72,7 +72,7 @@ end
 
 function class:draw_cell(char, x, y, options)
     options = options or {}
-    local text_color = options.text_color or self.text_color
+    local text_color = table_utils.dup(options.text_color or self.text_color)
     local alpha = options.alpha or 1
 
     if #text_color == 3 then
