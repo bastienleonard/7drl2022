@@ -86,7 +86,9 @@ function class:draw_cell(char, x, y, options)
     assert(x < self.width)
     assert(y >= 0)
     assert(y < self.height)
-    local background_color = table_utils.dup(self.background_color)
+    local background_color = table_utils.dup(
+        options.background_color or self.background_color
+    )
     table.insert(background_color, alpha)
     love.graphics.setColor(unpack(background_color))
     love.graphics.rectangle(

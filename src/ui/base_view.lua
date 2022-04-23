@@ -40,6 +40,7 @@ end
 function class._init(self, options)
     assert(options)
     self.id = options.id
+    self.background_color = options.background_color
 end
 
 function class:measure(options)
@@ -52,6 +53,21 @@ function class:draw(x, y)
     assert(self:is_measured())
     self.x = x
     self.y = y
+
+    if self.background_color then
+        for x = self.x, self.x + self.measured_width - 1 do
+            for y = self.y, self.y + self.measured_height - 1 do
+                globals.terminal:draw_cell(
+                    ' ',
+                    x,
+                    y,
+                    {
+                        background_color = self.background_color
+                    }
+                )
+            end
+        end
+    end
 
     if DRAW_BOUNDS then
         local terminal = globals.terminal
@@ -121,6 +137,10 @@ function class:draw_text(text, x, y, options)
                 )
             )
         end
+    end
+
+    if not options.background_color then
+        options.background_color = self.background_color
     end
 
     draw_text(text, x, y, options)
