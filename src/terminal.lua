@@ -1,6 +1,7 @@
 local utf8 = require('utf8')
 
 local colors = require('colors')
+local Rect = require('rect')
 local table_utils = require('table_utils')
 local ui_scaled = require('ui_scaled')
 
@@ -42,6 +43,7 @@ local function init(self, font_size)
     assert(self.font_y_offset >= 0)
     self.width = math.floor(love.graphics.getWidth() / self.cell_width)
     self.height = math.floor(love.graphics.getHeight() / self.cell_height)
+    self.rect = Rect.new(0, 0, self.width, self.height)
     self.x_offset = math.floor(
         (love.graphics.getWidth() - self.width * self.cell_width) / 2
     )
@@ -81,11 +83,18 @@ function class:draw_cell(char, x, y, options)
         error('Unreachable')
     end
 
+    if not self.rect:contains(x, y) then
+        error(
+            string.format(
+                '(%s,%s) is not within terminal bounds %s',
+                x,
+                y,
+                self.rect
+            )
+        )
+    end
+
     assert(utf8.len(char) == 1)
-    assert(x >= 0)
-    assert(x < self.width)
-    assert(y >= 0)
-    assert(y < self.height)
     local background_color = table_utils.dup(
         options.background_color or self.background_color
     )
