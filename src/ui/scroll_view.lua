@@ -128,17 +128,38 @@ function class:draw(x, y)
     local child = self.children[1]
     assert(child.children)
     local current_offset = 0
+    local state_offset = self:get_state().scrolled_offset
 
     for _, view in ipairs(child.children) do
-        if y >= self.y + self.measured_height then
-            break
+        if current_offset + view.measured_height - 1 >= state_offset then
+            local draw_y = y - state_offset
+
+            if draw_y >= self.y + self.measured_height then
+                break
+            end
+
+            local within_bounds =
+                draw_y >= self.y
+                and (draw_y + view.measured_height
+                     < self.y + self.measured_height)
+
+            if within_bounds then
+                view:draw(x, draw_y)
+            else
+                local terminal = globals.terminal
+                love.graphics.setScissor(
+                    terminal.x_offset + self.x * terminal.cell_width,
+                    terminal.y_offset + self.y * terminal.cell_height,
+                    self.measured_width * terminal.cell_width,
+                    self.measured_height * terminal.cell_height
+                )
+                view:allow_drawing_out_of_bounds()
+                view:draw(x, draw_y)
+                love.graphics.setScissor()
+            end
         end
 
-        if current_offset >= self:get_state().scrolled_offset then
-            view:draw(x, y)
-            y = y + view.measured_height
-        end
-
+        y = y + view.measured_height
         current_offset = current_offset + view.measured_height
     end
 end

@@ -55,15 +55,21 @@ function class:draw(x, y)
     self.y = y
 
     if self.background_color then
+        local options = {
+            background_color = self.background_color
+        }
+
+        if self.allow_drawing_out_of_bounds then
+            options.allow_drawing_out_of_bounds = true
+        end
+
         for x = self.x, self.x + self.measured_width - 1 do
             for y = self.y, self.y + self.measured_height - 1 do
                 globals.terminal:draw_cell(
                     ' ',
                     x,
                     y,
-                    {
-                        background_color = self.background_color
-                    }
+                    options
                 )
             end
         end
@@ -143,6 +149,10 @@ function class:draw_text(text, x, y, options)
         options.background_color = self.background_color
     end
 
+    if self.allow_drawing_out_of_bounds then
+        options.allow_drawing_out_of_bounds = true
+    end
+
     draw_text(text, x, y, options)
 end
 
@@ -160,6 +170,10 @@ function class:on_click(x, y)
             end
         end
     end
+end
+
+function class:allow_drawing_out_of_bounds()
+    self._allow_drawing_out_of_bounds = true
 end
 
 return class

@@ -83,7 +83,8 @@ function class:draw_cell(char, x, y, options)
         error('Unreachable')
     end
 
-    if not self.rect:contains(x, y) then
+    if not options.allow_drawing_out_of_bounds
+        and not self.rect:contains(x, y) then
         error(
             string.format(
                 '(%s,%s) is not within terminal bounds %s',

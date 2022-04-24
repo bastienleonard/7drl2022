@@ -1,7 +1,8 @@
-## Upcoming
+## 0.3 — 24 April 2022
 
 * Add key bindings for changing the font size.
 * Support scrolling in the messages log.
+* Line-wrap messages that are too long for one line.
 * Make the death menu items clickable.
 * Fix polearm's name starting with a capital letter.
 * Fix dungeon content sometimes not displaying correctly when the map was
