@@ -1,10 +1,11 @@
 local utf8 = require('utf8')
 
+local make_class = require('make_class')
 local Rect = require('rect')
 
 local DRAW_BOUNDS = false
 
-local class = {}
+local class = make_class('BaseView')
 local view_states = {}
 
 local function draw_text(text, x, y, options)

@@ -1,10 +1,14 @@
 local array_utils = require('array_utils')
 local ColumnView = require('ui.column_view')
+local make_class = require('make_class')
 local TextView = require('ui.text_view')
 
-local parent = ColumnView
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'KeyBindingsView',
+    {
+        _parent = ColumnView
+    }
+)
 
 local function make_ui()
     local x = {
@@ -44,13 +48,9 @@ function class.new(options)
             return TextView.new({ text = row })
         end
     )
-    parent._init(self, options)
+    class.parent._init(self, options)
     setmetatable(self, class)
     return self
-end
-
-function class:__tostring()
-    return 'KeyBindingsView'
 end
 
 return class

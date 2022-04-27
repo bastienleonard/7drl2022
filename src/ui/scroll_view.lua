@@ -1,10 +1,14 @@
 local BaseView = require('ui.base_view')
 local ButtonView = require('ui.button_view')
+local make_class = require('make_class')
 local utils = require('utils')
 
-local parent = BaseView
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'ScrollView',
+    {
+        _parent = BaseView
+    }
+)
 
 local SCROLL_STEP = 5
 
@@ -68,13 +72,9 @@ end
 
 function class.new(options)
     local self = setmetatable({}, class)
-    parent._init(self, options)
+    class.parent._init(self, options)
     init(self, options)
     return self
-end
-
-function class:__tostring()
-    return 'ScrollView'
 end
 
 function class:measure(options)
@@ -112,7 +112,7 @@ function class:measure(options)
 end
 
 function class:draw(x, y)
-    parent.draw(self, x, y)
+    class.parent.draw(self, x, y)
 
     if self.measured_width < 2 or self.measured_height < 2 then
         return

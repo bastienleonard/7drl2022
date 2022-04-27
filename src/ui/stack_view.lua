@@ -1,10 +1,14 @@
 local BaseView = require('ui.base_view')
 local enum = require('enum')
+local make_class = require('make_class')
 local utils = require('utils')
 
-local parent = BaseView
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'StackView',
+    {
+        _parent = BaseView
+    }
+)
 class.Orientation = enum('HORIZONTAL', 'VERTICAL')
 
 function class._init(self, options)
@@ -14,13 +18,9 @@ end
 
 function class.new(options)
     local self = {}
-    parent._init(self, options)
+    class.parent._init(self, options)
     class._init(self, options)
     return setmetatable(self, class)
-end
-
-function class:__tostring()
-    return 'StackView'
 end
 
 function class:measure(options)
@@ -100,7 +100,7 @@ function class:measure(options)
 end
 
 function class:draw(x, y)
-    parent.draw(self, x, y)
+    class.parent.draw(self, x, y)
 
     for _, child in ipairs(self.children) do
         child:draw(x, y)

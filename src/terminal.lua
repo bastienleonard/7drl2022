@@ -1,12 +1,12 @@
 local utf8 = require('utf8')
 
 local colors = require('colors')
+local make_class = require('make_class')
 local Rect = require('rect')
 local table_utils = require('table_utils')
 local ui_scaled = require('ui_scaled')
 
-local class = {}
-class.__index = class
+local class = make_class('Terminal')
 
 local FONT_SOURCE_CODE_PRO = 'assets/fonts/source_code_pro/static/SourceCodePro-Regular.ttf'
 

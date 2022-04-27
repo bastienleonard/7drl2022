@@ -1,10 +1,9 @@
 local enum = require('enum')
+local make_class = require('make_class')
 
-local class = {
-    Kind = enum('NOTHING', 'WALL', 'STAIRS'),
-    FovStatus = enum('UNEXPLORED', 'EXPLORED', 'IN_SIGHT')
-}
-class.__index = class
+local class = make_class('Tile')
+class.Kind = enum('NOTHING', 'WALL', 'STAIRS')
+class.FovStatus = enum('UNEXPLORED', 'EXPLORED', 'IN_SIGHT')
 
 function class.new(kind)
     assert(kind)

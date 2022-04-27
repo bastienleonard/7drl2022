@@ -1,5 +1,6 @@
-local class = {}
-class.__index = class
+local make_class = require('make_class')
+
+local class = make_class('Map')
 
 local function init(self, options)
     self.width = options.width

@@ -1,10 +1,14 @@
 local BaseView = require('ui.base_view')
+local make_class = require('make_class')
 local TextView = require('ui.text_view')
 local utils = require('utils')
 
-local parent = BaseView
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'BorderView',
+    {
+        _parent = BaseView
+    }
+)
 
 local function init(self, options)
     self.title = utils.require_key(options, 'title')
@@ -20,13 +24,9 @@ end
 
 function class.new(options)
     local self = {}
-    parent._init(self, options)
+    class.parent._init(self, options)
     init(self, options)
     return setmetatable(self, class)
-end
-
-function class:__tostring()
-    return 'BorderView'
 end
 
 function class:measure(options)
@@ -55,7 +55,7 @@ function class:measure(options)
 end
 
 function class:draw(x, y)
-    parent.draw(self, x, y)
+    class.parent.draw(self, x, y)
 
     if self.measured_width < 3 or self.measured_height < 3 then
         return

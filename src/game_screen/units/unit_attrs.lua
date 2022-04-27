@@ -1,7 +1,7 @@
+local make_class = require('make_class')
 local utils = require('utils')
 
-local class = {}
-class.__index = class
+local class = make_class('UnitAttrs')
 
 function class.new(strength, dexterity)
     local self = {

@@ -74,6 +74,21 @@ function module.map_not_nil(array, f)
     return result
 end
 
+function module.map_to_table(array, f)
+    assert(array)
+    assert(f)
+    local result = {}
+
+    for _, item in ipairs(array) do
+        local key, value = f(item)
+        assert(key)
+        assert(value)
+        result[key] = value
+    end
+
+    return result
+end
+
 function module.contains(array, value)
     for _, item in ipairs(array) do
         if item == value then

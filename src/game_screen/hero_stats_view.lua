@@ -1,10 +1,14 @@
 local array_utils = require('array_utils')
 local ColumnView = require('ui.column_view')
+local make_class = require('make_class')
 local TextView = require('ui.text_view')
 
-local parent = ColumnView
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'HeroStatsView',
+    {
+        _parent = ColumnView
+    }
+)
 
 local function init(self, options)
     local hero = globals.screens:current().hero
@@ -24,17 +28,13 @@ local function init(self, options)
             })
         end
     )
-    parent._init(self, options)
+    class.parent._init(self, options)
 end
 
 function class.new(options)
     local self = {}
     init(self, options)
     return setmetatable(self, class)
-end
-
-function class:__tostring()
-    return 'HeroStatsView'
 end
 
 return class

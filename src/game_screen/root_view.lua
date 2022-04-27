@@ -2,15 +2,19 @@ local BaseView = require('ui.base_view')
 local BorderView = require('ui.border_view')
 local HeroStatsView = require('game_screen.hero_stats_view')
 local KeyBindingsView = require('game_screen.key_bindings_view')
+local make_class = require('make_class')
 local MapView = require('game_screen.map_view')
 local MessageLogView = require('game_screen.message_log_view')
 local RowView = require('ui.row_view')
 local ScrollView = require('ui.scroll_view')
 local utils = require('utils')
 
-local parent = BaseView
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'RootView',
+    {
+        _parent = BaseView
+    }
+)
 
 class.ID_MESSAGES_SCROLL_VIEW = 'messages_scroll_view'
 
@@ -67,12 +71,8 @@ function class.new(options)
         children = {}
     }
     setmetatable(self, class)
-    parent._init(self, options)
+    class.parent._init(self, options)
     return self
-end
-
-function class:__tostring()
-    return 'game_screen.RootView'
 end
 
 function class:measure(options)
@@ -147,7 +147,7 @@ function class:measure(options)
 end
 
 function class:draw(x, y)
-    parent.draw(self, x, y)
+    class.parent.draw(self, x, y)
 
     for _, child in ipairs(self.children) do
         child:draw(x + child.dx, y + child.dy)

@@ -2,13 +2,18 @@ local BaseScreen = require('base_screen')
 local ButtonView = require('ui.button_view')
 local colors = require('colors')
 local ColumnView = require('ui.column_view')
+local make_class = require('make_class')
 local PlayerInput = require('player_input')
 local TextView = require('ui.text_view')
 local utils = require('utils')
 
 local parent = BaseScreen
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'DeathScreen',
+    {
+        _parent = BaseScreen
+    }
+)
 
 local function init(self, options)
     self.items = {
@@ -39,7 +44,7 @@ end
 
 function class.new()
     local self = {}
-    parent._init(self, options)
+    class.parent._init(self, options)
     init(self, options)
     return setmetatable(self, class)
 end

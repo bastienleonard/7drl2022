@@ -1,13 +1,13 @@
+local make_class = require('make_class')
 local MeleeDamageType = require('melee_damage_type')
 local DamageType = require('damage_type')
 local UnitAttrs = require('game_screen.units.unit_attrs')
 local UnitKind = require('game_screen.units.unit_kind')
 local weapons = require('weapons')
 
-local class = {
-    Kind = UnitKind,
-    Attrs = UnitAttrs
-}
+local class = make_class('BaseUnit')
+class.Kind = UnitKind
+class.Attrs = UnitAttrs
 
 function class._init(self, kind, position, attrs)
     self.kind = kind

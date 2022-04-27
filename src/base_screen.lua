@@ -1,4 +1,6 @@
-local class = {}
+local make_class = require('make_class')
+
+local class = make_class('BaseScreen')
 
 local function screen_coords_to_cells(x, y)
     local terminal = globals.terminal

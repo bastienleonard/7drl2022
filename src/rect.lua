@@ -1,9 +1,12 @@
+local make_class = require('make_class')
 local utils = require('utils')
 
-local class = {
-    __tostring = utils.make_to_string('Rect', 'x', 'y', 'width', 'height')
-}
-class.__index = class
+local class = make_class(
+    'Rect',
+    {
+        _to_string =  utils.make_to_string('Rect', 'x', 'y', 'width', 'height')
+    }
+)
 
 function class.new(x, y, width, height)
     assert(x)

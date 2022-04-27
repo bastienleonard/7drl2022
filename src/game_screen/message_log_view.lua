@@ -1,10 +1,14 @@
 local ColumnView = require('ui.column_view')
+local make_class = require('make_class')
 local TextView = require('ui.text_view')
 local utils = require('utils')
 
-local parent = ColumnView
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'MessageLogView',
+    {
+        _parent = ColumnView
+    }
+)
 
 local function make_children()
     local children = {}
@@ -27,13 +31,9 @@ function class.new(options)
     local self = {}
     setmetatable(self, class)
     options.children = make_children()
-    parent._init(self, options)
+    class.parent._init(self, options)
     init(self, options)
     return self
-end
-
-function class:__tostring()
-    return 'MessagesLogView'
 end
 
 return class

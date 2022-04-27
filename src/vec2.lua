@@ -1,9 +1,12 @@
+local make_class = require('make_class')
 local utils = require('utils')
 
-local class = {
-    __tostring = utils.make_to_string('Vec2', 'x', 'y')
-}
-class.__index = class
+local class = make_class(
+    'Vec2',
+    {
+        _to_string = utils.make_to_string('Vec2', 'x', 'y')
+    }
+)
 
 function class.new(x, y)
     assert(x)

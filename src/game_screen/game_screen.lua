@@ -4,6 +4,7 @@ local ColumnView = require('ui.column_view')
 local DamageType = require('damage_type')
 local DeathScreen = require('death_screen')
 local generate_level = require('game_screen.generate_level')
+local make_class = require('make_class')
 local melee_damage = require('melee_damage')
 local MeleeDamageType = require('melee_damage_type')
 local MovementDirection = require('game_screen.movement_direction')
@@ -17,9 +18,12 @@ local UnitKind = require('game_screen.units.unit_kind')
 local utils = require('utils')
 local Vec2 = require('vec2')
 
-local parent = BaseScreen
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'GameScreen',
+    {
+        _parent = BaseScreen
+    }
+)
 
 -- Contains function that cannot be declared as local because that would cause
 -- circular references.
@@ -459,14 +463,10 @@ end
 
 function class.new()
     local self = {}
-    parent._init(self)
+    class.parent._init(self)
     self = setmetatable(self, class)
     init(self)
     return self
-end
-
-function class:__tostring()
-    return 'GameScreen'
 end
 
 function class:draw()

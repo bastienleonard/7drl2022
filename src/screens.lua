@@ -1,7 +1,7 @@
 local array_utils = require('array_utils')
+local make_class = require('make_class')
 
-local class = {}
-class.__index = class
+local class = make_class('Screens')
 
 function class.new()
     local self = {

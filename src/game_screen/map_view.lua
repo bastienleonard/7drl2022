@@ -1,10 +1,14 @@
 local BaseView = require('ui.base_view')
 local colors = require('colors')
+local make_class = require('make_class')
 local utils = require('utils')
 
-local parent = BaseView
-local class = setmetatable({}, { __index = parent })
-class.__index = class
+local class = make_class(
+    'MapView',
+    {
+        _parent = BaseView
+    }
+)
 
 local function tile_rendering_info(tile, unit)
     local char
@@ -59,12 +63,8 @@ end
 
 function class.new(options)
     local self = {}
-    parent._init(self, options)
+    class.parent._init(self, options)
     return setmetatable(self, class)
-end
-
-function class:__tostring()
-    return 'MapView'
 end
 
 function class:measure(options)
@@ -73,7 +73,7 @@ function class:measure(options)
 end
 
 function class:draw(x, y)
-    parent.draw(self, x, y)
+    class.parent.draw(self, x, y)
     local map = globals.screens:current().map
     local terminal = globals.terminal
     local hero = globals.screens:current().hero
