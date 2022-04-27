@@ -1,9 +1,8 @@
-local utf8 = require('utf8')
-
 local colors = require('colors')
 local make_class = require('make_class')
 local Rect = require('rect')
 local table_utils = require('table_utils')
+local Text = require('text')
 local ui_scaled = require('ui_scaled')
 
 local class = make_class('Terminal')
@@ -89,7 +88,8 @@ function class:draw_cell(char, x, y, options)
         )
     end
 
-    assert(utf8.len(char) == 1)
+    assert(char:is(Text))
+    assert(char:length() == 1)
     local background_color = table_utils.dup(
         options.background_color or self.background_color
     )
@@ -104,7 +104,7 @@ function class:draw_cell(char, x, y, options)
     )
     love.graphics.setColor(unpack(text_color))
     love.graphics.print(
-        char,
+        char.lua_string,
         self.font,
         self.x_offset + x * self.cell_width + self.font_x_offset,
         self.y_offset + y * self.cell_height + self.font_y_offset

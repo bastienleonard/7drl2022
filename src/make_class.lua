@@ -19,7 +19,24 @@ return function(name, options)
 
     local class = {
         parent = options._parent,
-        __tostring = options._to_string or utils.make_to_string(name)
+        __tostring = options._to_string or utils.make_to_string(name),
+        is = function(self, other_class)
+            local class = self.class
+
+            while true do
+                if class == other_class then
+                    return true
+                end
+
+                if class.parent then
+                    class = class.parent.class
+                else
+                    break
+                end
+            end
+
+            return false
+        end
    }
     class.__index = class
     class.new = function(...)

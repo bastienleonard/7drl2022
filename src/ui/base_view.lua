@@ -1,7 +1,6 @@
-local utf8 = require('utf8')
-
 local make_class = require('make_class')
 local Rect = require('rect')
+local Text = require('text')
 
 local DRAW_BOUNDS = false
 
@@ -12,17 +11,12 @@ local function draw_text(text, x, y, options)
     options = options or {}
     local max_width = options.max_width or globals.terminal.width - x
 
-    for i = 1, utf8.len(text) do
+    for i = 1, text:length() do
         if i > max_width then
             break
         end
 
-        local char_start_offset = utf8.offset(text, i)
-        local next_char_start_offset = utf8.offset(text, i + 1)
-        local char = text:sub(
-            char_start_offset,
-            next_char_start_offset - 1
-        )
+        local char = text:text_at(i)
         globals.terminal:draw_cell(char, x, y, options)
         x = x + 1
     end
@@ -119,7 +113,13 @@ function class:draw_text(text, x, y, options)
     options = options or {}
     assert(x >= 0)
     assert(y >= 0)
-    local text_length = options.max_width or utf8.len(text)
+
+    if type(text) == 'string' then
+        text = Text.new(text)
+    end
+
+    assert(text:is(Text))
+    local text_length = options.max_width or text:length()
 
     if text_length == 0 then
         return

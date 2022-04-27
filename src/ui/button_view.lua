@@ -1,7 +1,6 @@
-local utf8 = require('utf8')
-
 local BaseView = require('ui.base_view')
 local make_class = require('make_class')
+local Text = require('text')
 local utils = require('utils')
 
 local class = make_class(
@@ -14,6 +13,13 @@ local class = make_class(
 function class._init(self, options)
     class.parent._init(self, options)
     self.text = utils.require_key(options, 'text')
+
+    if type(self.text) == 'string' then
+        self.text = Text.new(self.text)
+    else
+        assert(self.text:is(Text))
+    end
+
     self.text_color = options.text_color
     self.on_click = utils.require_key(options, 'on_click')
 end
@@ -25,7 +31,7 @@ function class:measure(options)
     if options.width then
         width = options.width
     else
-        width = utf8.len(self.text)
+        width = self.text:length()
 
         if options.max_width then
             width = math.min(width, options.max_width)
@@ -50,7 +56,7 @@ end
 function class:draw(x, y)
     class.parent.draw(self, x, y)
 
-    if #self.text > 0
+    if self.text:length() > 0
         and self.measured_width > 0
         and self.measured_height > 0 then
         self:draw_text(
