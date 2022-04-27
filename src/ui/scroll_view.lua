@@ -12,7 +12,34 @@ local class = make_class(
 
 local SCROLL_STEP = 5
 
-local function init(self, options)
+local function last_offset(self)
+    local child = self.children[1]
+    return child.measured_height - self.measured_height
+end
+
+function class.scroll_down(id)
+    local state = class.state_from_id(id)
+    state.scrolled_offset = state.scrolled_offset + SCROLL_STEP
+end
+
+function class.scroll_up(id)
+    local state = class.state_from_id(id)
+    local scrolled_offset = state.scrolled_offset
+    scrolled_offset = scrolled_offset - SCROLL_STEP
+
+    if scrolled_offset < 0 then
+        scrolled_offset = 0
+    end
+
+    state.scrolled_offset = scrolled_offset
+end
+
+function class.scroll_to_bottom(id)
+    class.state_from_id(id).scroll_to_last = true
+end
+
+function class._init(self, options)
+    class.parent._init(self, options)
     self.children = utils.require_key(options, 'children')
     assert(#self.children == 1)
     table.insert(
@@ -42,39 +69,6 @@ local function init(self, options)
     if state.scrolled_offset == nil then
         state.scrolled_offset = 0
     end
-end
-
-local function last_offset(self)
-    local child = self.children[1]
-    return child.measured_height - self.measured_height
-end
-
-function class.scroll_down(id)
-    local state = class.state_from_id(id)
-    state.scrolled_offset = state.scrolled_offset + SCROLL_STEP
-end
-
-function class.scroll_up(id)
-    local state = class.state_from_id(id)
-    local scrolled_offset = state.scrolled_offset
-    scrolled_offset = scrolled_offset - SCROLL_STEP
-
-    if scrolled_offset < 0 then
-        scrolled_offset = 0
-    end
-
-    state.scrolled_offset = scrolled_offset
-end
-
-function class.scroll_to_bottom(id)
-    class.state_from_id(id).scroll_to_last = true
-end
-
-function class.new(options)
-    local self = setmetatable({}, class)
-    class.parent._init(self, options)
-    init(self, options)
-    return self
 end
 
 function class:measure(options)

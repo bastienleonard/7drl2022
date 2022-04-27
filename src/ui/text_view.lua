@@ -11,12 +11,6 @@ local class = make_class(
     }
 )
 
-local function init(self, options)
-    self.text = utils.require_key(options, 'text')
-    self.text_length = utf8.len(self.text)
-    self.text_color = options.text_color
-end
-
 local function split_text_into_rows(text, text_length, max_width, max_height)
     if text_length <= max_width then
         return { text }
@@ -83,11 +77,11 @@ local function split_text_into_rows(text, text_length, max_width, max_height)
     return rows
 end
 
-function class.new(options)
-    local self = {}
+function class._init(self, options)
     class.parent._init(self, options)
-    init(self, options)
-    return setmetatable(self, class)
+    self.text = utils.require_key(options, 'text')
+    self.text_length = utf8.len(self.text)
+    self.text_color = options.text_color
 end
 
 function class:measure(options)

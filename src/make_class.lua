@@ -20,8 +20,15 @@ return function(name, options)
     local class = {
         parent = options._parent,
         __tostring = options._to_string or utils.make_to_string(name)
-    }
+   }
     class.__index = class
+    class.new = function(...)
+        local args = { ... }
+        local self = setmetatable({}, class)
+        self.class = class
+        class._init(self, unpack(args))
+        return self
+    end
     setmetatable(
         class,
         {

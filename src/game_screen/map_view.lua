@@ -61,10 +61,8 @@ local function tile_rendering_info(tile, unit)
     return char, color, alpha
 end
 
-function class.new(options)
-    local self = {}
+function class._init(self, options)
     class.parent._init(self, options)
-    return setmetatable(self, class)
 end
 
 function class:measure(options)

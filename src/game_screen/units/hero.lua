@@ -12,17 +12,13 @@ function class.next_level_xp(level)
     return level ^ 2
 end
 
-function class.new(position)
+function class._init(self, position)
     local level = 1
-    local self = {
-        class = class,
-        level = level,
-        xp = 0,
-        next_level_xp = class.next_level_xp(level)
-    }
-    setmetatable(self, class)
+    self.class = class
+    self.level = level
+    self.xp = 0
+    self.next_level_xp = class.next_level_xp(level)
     class.parent._init(self, class.Kind.HERO, position, class.Attrs.new(12, 14))
-    return self
 end
 
 return class

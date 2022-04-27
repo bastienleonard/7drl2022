@@ -15,7 +15,8 @@ local class = make_class(
     }
 )
 
-local function init(self, options)
+function class._init(self, options)
+    class.parent._init(self, options)
     self.items = {
         {
             text = 'New game',
@@ -40,13 +41,6 @@ end
 
 local function activate_current_item(self)
     self.items[self.current_item].activate()
-end
-
-function class.new()
-    local self = {}
-    class.parent._init(self, options)
-    init(self, options)
-    return setmetatable(self, class)
 end
 
 function class:draw()

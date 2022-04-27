@@ -3,11 +3,8 @@ local make_class = require('make_class')
 
 local class = make_class('Screens')
 
-function class.new()
-    local self = {
-        screens = {}
-    }
-    return setmetatable(self, class)
+function class._init(self)
+    self.screens = {}
 end
 
 function class:current()

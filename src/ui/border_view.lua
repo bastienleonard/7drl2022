@@ -10,7 +10,8 @@ local class = make_class(
     }
 )
 
-local function init(self, options)
+function class._init(self, options)
+    class.parent._init(self, options)
     self.title = utils.require_key(options, 'title')
 
     if options.add_child_padding == nil then
@@ -20,13 +21,6 @@ local function init(self, options)
     self.add_child_padding = options.add_child_padding
     self.children = utils.require_key(options, 'children')
     assert(#self.children == 1)
-end
-
-function class.new(options)
-    local self = {}
-    class.parent._init(self, options)
-    init(self, options)
-    return setmetatable(self, class)
 end
 
 function class:measure(options)

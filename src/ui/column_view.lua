@@ -13,10 +13,4 @@ function class._init(self, options)
     class.parent._init(self, options)
 end
 
-function class.new(options)
-    local self = {}
-    class._init(self, options)
-    return setmetatable(self, class)
-end
-
 return class

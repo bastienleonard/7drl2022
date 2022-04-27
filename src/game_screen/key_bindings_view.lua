@@ -40,8 +40,7 @@ local function make_ui()
     )
 end
 
-function class.new(options)
-    local self = {}
+function class._init(self, options)
     options.children = array_utils.map(
         make_ui(),
         function(row)
@@ -49,8 +48,6 @@ function class.new(options)
         end
     )
     class.parent._init(self, options)
-    setmetatable(self, class)
-    return self
 end
 
 return class

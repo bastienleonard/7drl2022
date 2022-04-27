@@ -8,11 +8,9 @@ local class = make_class(
     }
 )
 
-function class.new(options)
-    local self = {}
+function class._init(self, options)
     options.orientation = StackView.Orientation.HORIZONTAL
     class.parent._init(self, options)
-    return setmetatable(self, class)
 end
 
 return class

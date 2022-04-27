@@ -10,7 +10,7 @@ local class = make_class(
     }
 )
 
-local function init(self, options)
+function class._init(self, options)
     local hero = globals.screens:current().hero
     local rows = {
         string.format('Level %s', hero.level),
@@ -29,12 +29,6 @@ local function init(self, options)
         end
     )
     class.parent._init(self, options)
-end
-
-function class.new(options)
-    local self = {}
-    init(self, options)
-    return setmetatable(self, class)
 end
 
 return class

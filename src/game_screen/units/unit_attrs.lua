@@ -3,12 +3,9 @@ local utils = require('utils')
 
 local class = make_class('UnitAttrs')
 
-function class.new(strength, dexterity)
-    local self = {
-        strength = utils.require_not_nil(strength, 'strength'),
-        dexterity = utils.require_not_nil(dexterity, 'dexterity')
-    }
-    return setmetatable(self, class)
+function class._init(self, strength, dexterity)
+    self.strength = utils.require_not_nil(strength, 'strength')
+    self.dexterity = utils.require_not_nil(dexterity, 'dexterity')
 end
 
 function class:max_hp()

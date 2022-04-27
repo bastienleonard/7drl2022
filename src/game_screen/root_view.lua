@@ -66,13 +66,9 @@ local function make_child_sizes(width, height)
     return result
 end
 
-function class.new(options)
-    local self = {
-        children = {}
-    }
-    setmetatable(self, class)
+function class._init(self, options)
     class.parent._init(self, options)
-    return self
+    self.children = {}
 end
 
 function class:measure(options)

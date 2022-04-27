@@ -8,8 +8,7 @@ local class = make_class(
     }
 )
 
-function class.new(position)
-    local self = setmetatable({}, class)
+function class._init(self, position)
     self.xp_bounty = 5
     class.parent._init(
         self,
@@ -17,7 +16,6 @@ function class.new(position)
         position,
         class.Attrs.new(12, 15)
     )
-    return self
 end
 
 return class

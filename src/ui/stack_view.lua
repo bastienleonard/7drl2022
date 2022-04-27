@@ -12,15 +12,9 @@ local class = make_class(
 class.Orientation = enum('HORIZONTAL', 'VERTICAL')
 
 function class._init(self, options)
+    class.parent._init(self, options)
     self.orientation = utils.require_key(options, 'orientation')
     self.children = utils.require_key(options, 'children')
-end
-
-function class.new(options)
-    local self = {}
-    class.parent._init(self, options)
-    class._init(self, options)
-    return setmetatable(self, class)
 end
 
 function class:measure(options)

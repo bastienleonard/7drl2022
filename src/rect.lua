@@ -8,17 +8,15 @@ local class = make_class(
     }
 )
 
-function class.new(x, y, width, height)
+function class._init(self, x, y, width, height)
     assert(x)
     assert(y)
     assert(width)
     assert(height)
-    local self = {}
     self.x = x
     self.y = y
     self.width = width
     self.height = height
-    return setmetatable(self, class)
 end
 
 function class:contains(x, y)

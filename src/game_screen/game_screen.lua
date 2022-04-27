@@ -450,7 +450,8 @@ local function handle_input(self, input)
     end
 end
 
-local function init(self)
+function class._init(self)
+    class.parent._init(self)
     self.messages = {}
     add_message(
         self,
@@ -459,14 +460,6 @@ local function init(self)
     )
     self.level_count = 0
     go_to_next_level(self)
-end
-
-function class.new()
-    local self = {}
-    class.parent._init(self)
-    self = setmetatable(self, class)
-    init(self)
-    return self
 end
 
 function class:draw()

@@ -8,14 +8,11 @@ local class = make_class(
     }
 )
 
-function class.new(x, y)
+function class._init(self, x, y)
     assert(x)
     assert(y)
-    local self = {
-        x = x,
-        y = y
-    }
-    return setmetatable(self, class)
+    self.x = x
+    self.y = y
 end
 
 function class:__eq(other)

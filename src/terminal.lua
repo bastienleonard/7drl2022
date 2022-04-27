@@ -10,7 +10,8 @@ local class = make_class('Terminal')
 
 local FONT_SOURCE_CODE_PRO = 'assets/fonts/source_code_pro/static/SourceCodePro-Regular.ttf'
 
-local function init(self, font_size)
+function class._init(self, font_size)
+    font_size = font_size or ui_scaled(15)
     self.font_size = font_size
     self.background_color = colors.BLACK
     self.text_color = colors.WHITE
@@ -61,13 +62,6 @@ local function init(self, font_size)
             self.y_offset
         )
     )
-end
-
-function class.new(font_size)
-    font_size = font_size or ui_scaled(15)
-    local self = {}
-    init(self, font_size)
-    return setmetatable(self, class)
 end
 
 function class:draw_cell(char, x, y, options)

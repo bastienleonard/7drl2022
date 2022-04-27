@@ -24,16 +24,9 @@ local function make_children()
     return children
 end
 
-local function init(self, options)
-end
-
-function class.new(options)
-    local self = {}
-    setmetatable(self, class)
+function class._init(self, options)
     options.children = make_children()
     class.parent._init(self, options)
-    init(self, options)
-    return self
 end
 
 return class

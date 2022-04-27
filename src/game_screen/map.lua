@@ -2,7 +2,7 @@ local make_class = require('make_class')
 
 local class = make_class('Map')
 
-local function init(self, options)
+function class._init(self, options)
     self.width = options.width
     self.height = options.height
     self.tiles = {}
@@ -10,12 +10,6 @@ local function init(self, options)
     for _ = 1, self.width * self.height do
         table.insert(self.tiles, options.make_tile())
     end
-end
-
-function class.new(options)
-    local self = {}
-    init(self, options)
-    return setmetatable(self, class)
 end
 
 function class:get(x, y)

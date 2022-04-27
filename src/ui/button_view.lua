@@ -11,17 +11,11 @@ local class = make_class(
     }
 )
 
-local function init(self, options)
+function class._init(self, options)
+    class.parent._init(self, options)
     self.text = utils.require_key(options, 'text')
     self.text_color = options.text_color
     self.on_click = utils.require_key(options, 'on_click')
-end
-
-function class.new(options)
-    local self = setmetatable({}, class)
-    class.parent._init(self, options)
-    init(self, options)
-    return self
 end
 
 function class:measure(options)

@@ -5,14 +5,11 @@ local class = make_class('Tile')
 class.Kind = enum('NOTHING', 'WALL', 'STAIRS')
 class.FovStatus = enum('UNEXPLORED', 'EXPLORED', 'IN_SIGHT')
 
-function class.new(kind)
+function class._init(self, kind)
     assert(kind)
-    local self = {
-        kind = kind,
-        fov_status = class.FovStatus.UNEXPLORED,
-        items = {}
-    }
-    return setmetatable(self, class)
+    self.kind = kind
+    self.fov_status = class.FovStatus.UNEXPLORED
+    self.items = {}
 end
 
 function class:blocks_sight()
