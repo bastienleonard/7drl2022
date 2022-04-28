@@ -40,10 +40,9 @@ return function(name, options)
    }
     class.__index = class
     class.new = function(...)
-        local args = { ... }
         local self = setmetatable({}, class)
         self.class = class
-        class._init(self, unpack(args))
+        class._init(self, ...)
         return self
     end
     setmetatable(
