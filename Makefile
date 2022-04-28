@@ -15,7 +15,8 @@ run: build
 .PHONY: build
 build:
 	rm -rf build/
-	mkdir -p build/
+	mkdir -p build/vendor/
+	cp -r vendor/* build/vendor/
 	cp -r assets/ build/
 	cd src/ && cp --parents **/*.lua ../build/
 

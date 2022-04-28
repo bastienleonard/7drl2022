@@ -1,5 +1,13 @@
+local RUN_PROFILER = false
+
 local GameScreen = require('game_screen.game_screen')
 local PlayerInput = require('player_input')
+local profile
+
+if RUN_PROFILER then
+    profile = require('vendor.profile.profile')
+end
+
 local Screens = require('screens')
 local Terminal = require('terminal')
 local ui_scaled = require('ui_scaled')
@@ -14,12 +22,29 @@ local function increase_font_size(delta)
 end
 
 function love.load()
+    if RUN_PROFILER then
+        profile.start()
+    end
+
     love.keyboard.setKeyRepeat(true)
     globals = {}
     globals.terminal = Terminal.new()
     love.graphics.setBackgroundColor(unpack(globals.terminal.background_color))
     globals.screens = Screens.new()
     globals.screens:push(GameScreen.new())
+end
+
+local profiler_time = 0
+
+function love.update(dt)
+    if RUN_PROFILER then
+        profiler_time = profiler_time + dt
+
+        if profiler_time >= 10 then
+            print(profile.report(20))
+            love.event.quit()
+        end
+    end
 end
 
 function love.draw()

@@ -1,0 +1,3 @@
+[submodule "vendor/profile"]
+	path = vendor/profile
+	url = git@github.com:2dengine/profile.lua.git
