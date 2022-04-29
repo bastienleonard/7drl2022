@@ -1,17 +1,24 @@
-local RUN_PROFILER = false
-
+local Config = require('config')
 local GameScreen = require('game_screen.game_screen')
 local PlayerInput = require('player_input')
-local profile
-
-if RUN_PROFILER then
-    profile = require('vendor.profile.profile')
-end
-
+local profiler = require('profiler')
 local Screens = require('screens')
 local Terminal = require('terminal')
 local ui_scaled = require('ui_scaled')
 local utils = require('utils')
+
+local fps_font = love.graphics.newFont(ui_scaled(100))
+
+local function draw_fps()
+    local text = string.format('%s FPS', love.timer.getFPS())
+    love.graphics.setColor(unpack(require('colors').RED))
+    love.graphics.print(
+        text,
+        fps_font,
+        love.graphics.getWidth() - fps_font:getWidth(text),
+        love.graphics.getHeight() - fps_font:getHeight()
+    )
+end
 
 local function increase_font_size(delta)
     local new_size = globals.terminal.font_size + delta
@@ -22,33 +29,30 @@ local function increase_font_size(delta)
 end
 
 function love.load()
-    if RUN_PROFILER then
-        profile.start()
+    globals = {}
+    globals.config = Config.new()
+
+    if globals.config.run_profiler then
+        profiler.start()
     end
 
-    love.keyboard.setKeyRepeat(true)
-    globals = {}
     globals.terminal = Terminal.new()
+    love.keyboard.setKeyRepeat(true)
     love.graphics.setBackgroundColor(unpack(globals.terminal.background_color))
     globals.screens = Screens.new()
     globals.screens:push(GameScreen.new())
 end
 
-local profiler_time = 0
-
 function love.update(dt)
-    if RUN_PROFILER then
-        profiler_time = profiler_time + dt
-
-        if profiler_time >= 10 then
-            print(profile.report(20))
-            love.event.quit()
-        end
-    end
+    profiler.update(dt)
 end
 
 function love.draw()
     globals.screens:current():draw()
+
+    if globals.config.draw_fps then
+        draw_fps()
+    end
 end
 
 function love.keypressed(key, scancode, is_repeat)
