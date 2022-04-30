@@ -19,31 +19,35 @@ return function(name, options)
 
     local class = {
         parent = options._parent,
-        __tostring = options._to_string or utils.make_to_string(name),
-        is = function(self, other_class)
-            local class = self.class
-
-            while true do
-                if class == other_class then
-                    return true
-                end
-
-                if class.parent then
-                    class = class.parent.class
-                else
-                    break
-                end
-            end
-
-            return false
-        end
-   }
+        __tostring = options._to_string or utils.make_to_string(name)
+    }
     class.__index = class
     class.new = function(...)
         local self = setmetatable({}, class)
         self.class = class
         class._init(self, ...)
         return self
+    end
+    class.is_instance = function(o)
+        if o == nil or type(o) == 'number' then
+            return false
+        end
+
+        local o_class = o.class
+
+        while true do
+            if o_class == class then
+                return true
+            end
+
+            if o_class.parent then
+                o_class = o_class.parent
+            else
+                return false
+            end
+        end
+
+        return false
     end
     setmetatable(
         class,

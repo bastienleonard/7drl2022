@@ -10,7 +10,7 @@ local function screen_coords_to_cells(x, y)
     elseif x > love.graphics.getWidth() - terminal.x_offset then
         x = terminal.width - 1
     else
-        x = math.floor((x - terminal.x_offset) / terminal.cell_width)
+        x = math.floor((x - terminal.x_offset) / terminal:cell_width())
     end
 
     if y < terminal.y_offset then
@@ -18,7 +18,7 @@ local function screen_coords_to_cells(x, y)
     elseif y > love.graphics.getHeight() - terminal.y_offset then
         y = terminal.height - 1
     else
-        y = math.floor((y - terminal.y_offset) / terminal.cell_height)
+        y = math.floor((y - terminal.y_offset) / terminal:cell_height())
     end
 
     return x, y

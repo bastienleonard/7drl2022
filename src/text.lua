@@ -1,8 +1,14 @@
 local utf8 = require('utf8')
 
 local make_class = require('make_class')
+local utils = require('utils')
 
-local class = make_class('Text')
+local class = make_class(
+    'Text',
+    {
+        _to_string = utils.make_to_string('Text', 'lua_string')
+    }
+)
 
 function class._init(self, lua_string)
     assert(lua_string)
@@ -38,5 +44,14 @@ function class.__concat(a, b)
 end
 
 class.EMPTY = class.new('')
+
+-- TODO: remove if unused
+function class:equals(other)
+    if type(other) == 'string' then
+
+    else
+        error('TODO: at least handle Text')
+    end
+end
 
 return class

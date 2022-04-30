@@ -1,3 +1,4 @@
+local CellKind = require('cell_kind')
 local make_class = require('make_class')
 local Rect = require('rect')
 local Text = require('text')
@@ -17,7 +18,7 @@ local function draw_text(text, x, y, options)
         end
 
         local char = text:text_at(i)
-        globals.terminal:draw_cell(char, x, y, options)
+        globals.terminal:draw_cell(CellKind.Character.new(char), x, y, options)
         x = x + 1
     end
 end
@@ -109,6 +110,13 @@ function class:rect()
     )
 end
 
+function class:draw_cell(cell_kind, x, y, options)
+    options = options or {}
+    assert(x >= 0)
+    assert(y >= 0)
+    globals.terminal:draw_cell(cell_kind, x, y, options)
+end
+
 function class:draw_text(text, x, y, options)
     options = options or {}
     assert(x >= 0)
@@ -118,7 +126,7 @@ function class:draw_text(text, x, y, options)
         text = Text.new(text)
     end
 
-    assert(text:is(Text))
+    assert(Text.is_instance(text))
     local text_length = options.max_width or text:length()
 
     if text_length == 0 then

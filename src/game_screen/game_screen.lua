@@ -270,6 +270,8 @@ local function attack(self, attacker, victim)
 
     if victim.hp <= 0 then
         if victim:is_hero() then
+            -- FIXME: remove
+            -- victim:heal()
             globals.screens:replace_top(DeathScreen.new())
         else
             array_utils.remove(self.units, victim)

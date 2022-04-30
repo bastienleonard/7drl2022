@@ -84,7 +84,7 @@ function class._init(self, options)
         self.text = Text.new(self.text)
     end
 
-    assert(self.text:is(Text))
+    assert(Text.is_instance(self.text))
     self.text_color = options.text_color
 end
 
