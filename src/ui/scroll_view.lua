@@ -145,10 +145,10 @@ function class:draw(x, y)
             else
                 local terminal = globals.terminal
                 love.graphics.setScissor(
-                    terminal.x_offset + self.x * terminal.cell_width,
-                    terminal.y_offset + self.y * terminal.cell_height,
-                    self.measured_width * terminal.cell_width,
-                    self.measured_height * terminal.cell_height
+                    terminal.x_offset + self.x * terminal:cell_width(),
+                    terminal.y_offset + self.y * terminal:cell_height(),
+                    self.measured_width * terminal:cell_width(),
+                    self.measured_height * terminal:cell_height()
                 )
                 view:allow_drawing_out_of_bounds()
                 view:draw(x, draw_y)

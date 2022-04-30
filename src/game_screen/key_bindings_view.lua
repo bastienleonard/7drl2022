@@ -23,8 +23,8 @@ local function make_ui()
         { '.', 'Skip turn' },
         { 'pagedown', 'Scroll messages down' },
         { 'pageup', 'Scroll messages up' },
-        { '-', 'Decrease font size' },
-        { '=', 'Increase font size' }
+        { '-', 'Decrease tile size' },
+        { '=', 'Increase tile size' }
     }
     return array_utils.map(
         x,

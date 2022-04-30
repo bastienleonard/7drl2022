@@ -1,4 +1,5 @@
 local BaseView = require('ui.base_view')
+local CellKind = require('cell_kind')
 local colors = require('colors')
 local make_class = require('make_class')
 local utils = require('utils')
@@ -11,8 +12,8 @@ local class = make_class(
 )
 
 local function tile_rendering_info(tile, unit)
-    local char
-    local color = nil
+    local cell_kind
+    local color
     local alpha = 0.2
 
     if tile.fov_status == tile.FovStatus.IN_SIGHT then
@@ -21,31 +22,31 @@ local function tile_rendering_info(tile, unit)
 
     if unit and tile.fov_status == tile.FovStatus.IN_SIGHT then
         if unit:is_hero() then
-            char = '@'
+            cell_kind = CellKind.Hero.new()
             color = colors.BLUE
         elseif unit.kind == unit.Kind.RAT then
-            char = 'r'
+            cell_kind = CellKind.Rat.new()
             color = colors.PINK
         elseif unit.kind == unit.Kind.KNIGHT then
-            char = 'k'
+            cell_kind = CellKind.Knight.new()
             color = colors.ORANGE
         elseif unit.kind == unit.Kind.DEMON then
-            char = 'd'
+            cell_kind = CellKind.Demon.new()
             color = colors.RED
         end
     else
         if tile.kind == tile.Kind.STAIRS then
-            char = '%'
+            cell_kind = CellKind.Stairs.new()
             color = colors.YELLOW
         elseif tile.kind == tile.Kind.WALL then
-            char = '#'
+            cell_kind = CellKind.Wall.new()
             color = colors.LIGHT_GRAY
         elseif tile.kind == tile.Kind.NOTHING then
             if #tile.items > 0 then
-                char = '?'
+                cell_kind = CellKind.Items.new()
                 color = colors.YELLOW
             else
-                char = '.'
+                cell_kind = CellKind.Nothing.new()
                 color = colors.DARK_GRAY
             end
         else
@@ -58,7 +59,10 @@ local function tile_rendering_info(tile, unit)
         end
     end
 
-    return char, color, alpha
+    assert(cell_kind)
+    assert(color)
+    assert(alpha)
+    return cell_kind, color, alpha
 end
 
 function class._init(self, options)
@@ -108,11 +112,11 @@ function class:draw(x, y)
 
             if tile.fov_status ~= tile.FovStatus.UNEXPLORED then
                 local unit = globals.screens:current():unit_at(map_x, map_y)
-                local char, color, alpha = tile_rendering_info(tile, unit)
+                local cell_kind, color, alpha = tile_rendering_info(tile, unit)
 
                 if self:rect():contains(terminal_x, terminal_y) then
-                    self:draw_text(
-                        char,
+                    self:draw_cell(
+                        cell_kind,
                         terminal_x,
                         terminal_y,
                         {

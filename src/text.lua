@@ -1,11 +1,22 @@
 local utf8 = require('utf8')
 
 local make_class = require('make_class')
+local utils = require('utils')
 
-local class = make_class('Text')
+local class = make_class(
+    'Text',
+    {
+        _to_string = utils.make_to_string('Text', 'lua_string')
+    }
+)
 
 function class._init(self, lua_string)
-    assert(lua_string)
+    assert(type(lua_string) == 'string')
+
+    if #lua_string == 0 then
+        print("Warning: use Text.EMPTY instead of Text.new('')")
+    end
+
     self.lua_string = lua_string
 end
 
@@ -25,7 +36,7 @@ function class:text_at(i)
     )
 end
 
-function class.__concat(a, b)
+function class.concat(a, b)
     if type(a) ~= 'string' then
         a = a.lua_string
     end

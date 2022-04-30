@@ -10,38 +10,38 @@ local class = make_class(
     }
 )
 
+local function split(s)
+    local words = {}
+    local current_word = Text.EMPTY
+
+    for i = 1, s:length() do
+        local char = s:text_at(i)
+
+        if char.lua_string == ' ' then
+            if current_word:length() > 0 then
+                table.insert(words, current_word)
+            end
+
+            current_word = Text.EMPTY
+        else
+            current_word = current_word:concat(char)
+        end
+    end
+
+    if current_word:length() > 0 then
+        table.insert(words, current_word)
+    end
+
+    return words
+end
+
 local function split_text_into_rows(text, text_length, max_width, max_height)
     if text_length <= max_width then
         return { text }
     end
 
-    local function split(s)
-        local words = {}
-        local current_word = ''
-
-        for i = 1, s:length() do
-            local char = s:text_at(i)
-
-            if char.lua_string == ' ' then
-                if current_word:length() > 0 then
-                    table.insert(words, current_word)
-                end
-
-                current_word = Text.EMPTY
-            else
-                current_word = current_word .. char
-            end
-        end
-
-        if current_word:length() > 0 then
-            table.insert(words, current_word)
-        end
-
-        return words
-    end
-
     local rows = {}
-    local current_row = Text.new('')
+    local current_row = Text.EMPTY
 
     for _, word in ipairs(split(text)) do
         local insert_space_char = current_row:length() > 0
@@ -55,7 +55,7 @@ local function split_text_into_rows(text, text_length, max_width, max_height)
 
         if current_row:length() + required_space <= max_width then
             if insert_space_char then
-                current_row = current_row .. ' ' .. word
+                current_row = current_row:concat(' '):concat(word)
             else
                 current_row = word
             end
@@ -84,7 +84,7 @@ function class._init(self, options)
         self.text = Text.new(self.text)
     end
 
-    assert(self.text:is(Text))
+    assert(Text.is_instance(self.text))
     self.text_color = options.text_color
 end
 

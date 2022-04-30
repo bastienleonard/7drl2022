@@ -13,15 +13,23 @@ local PlayerInput = enum(
     'ACTIVATE',
     'SCROLL_DOWN',
     'SCROLL_UP',
-    'INCREASE_FONT_SIZE',
-    'DECREASE_FONT_SIZE'
+    'INCREASE_TILE_SIZE',
+    'DECREASE_TILE_SIZE',
+    'CYCLE_TILESET_LEFT',
+    'CYCLE_TILESET_RIGHT'
 )
 
 PlayerInput.from_scancode = function(scancode)
     assert(scancode)
     local input = nil
 
-    if scancode == '.' then
+    if scancode == 'left'
+        and love.keyboard.isScancodeDown('lctrl', 'rctrl') then
+        input = PlayerInput.CYCLE_TILESET_LEFT
+    elseif scancode == 'right'
+        and love.keyboard.isScancodeDown('lctrl', 'rctrl') then
+        input = PlayerInput.CYCLE_TILESET_RIGHT
+    elseif scancode == '.' then
         input = PlayerInput.REST
     elseif scancode == 'h' then
         input = PlayerInput.MOVE_LEFT
@@ -54,9 +62,9 @@ PlayerInput.from_scancode = function(scancode)
     elseif scancode == 'pageup' then
         input = PlayerInput.SCROLL_UP
     elseif scancode == '=' then
-        input = PlayerInput.INCREASE_FONT_SIZE
+        input = PlayerInput.INCREASE_TILE_SIZE
     elseif scancode == '-' then
-        input = PlayerInput.DECREASE_FONT_SIZE
+        input = PlayerInput.DECREASE_TILE_SIZE
     end
 
     return input
