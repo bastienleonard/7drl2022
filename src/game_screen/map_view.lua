@@ -13,7 +13,7 @@ local class = make_class(
 local function tile_rendering_info(tile, unit)
     local char
     local color = nil
-    local alpha = 0.3
+    local alpha = 0.2
 
     if tile.fov_status == tile.FovStatus.IN_SIGHT then
         alpha = 1.0
