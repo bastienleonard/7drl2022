@@ -25,13 +25,16 @@ end
 function class.scroll_up(id)
     local state = class.state_from_id(id)
     local scrolled_offset = state.scrolled_offset
-    scrolled_offset = scrolled_offset - SCROLL_STEP
 
-    if scrolled_offset < 0 then
-        scrolled_offset = 0
+    if scrolled_offset then
+        scrolled_offset = scrolled_offset - SCROLL_STEP
+
+        if scrolled_offset < 0 then
+            scrolled_offset = 0
+        end
+
+        state.scrolled_offset = scrolled_offset
     end
-
-    state.scrolled_offset = scrolled_offset
 end
 
 function class.scroll_to_bottom(id)
