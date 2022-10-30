@@ -41,7 +41,7 @@ local function split_text_into_rows(text, text_length, max_width, max_height)
     end
 
     local rows = {}
-    local current_row = Text.new('')
+    local current_row = Text.EMPTY
 
     for _, word in ipairs(split(text)) do
         local insert_space_char = current_row:length() > 0
