@@ -17,7 +17,7 @@ local function split_text_into_rows(text, text_length, max_width, max_height)
 
     local function split(s)
         local words = {}
-        local current_word = ''
+        local current_word = Text.EMPTY
 
         for i = 1, s:length() do
             local char = s:text_at(i)
